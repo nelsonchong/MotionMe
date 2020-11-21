@@ -9,7 +9,7 @@ import dagger.hilt.android.components.ActivityComponent
 
 @Module
 @InstallIn(ActivityComponent::class)
-interface RepoModule {
+object RepoModule {
 
     @Provides
     fun provideMovieRepo(): MovieRepo {
