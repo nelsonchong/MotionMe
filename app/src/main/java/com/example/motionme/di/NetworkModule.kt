@@ -7,7 +7,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -16,10 +18,15 @@ object NetworkModule {
 
     @Provides
     fun providesOkHttpClient(): OkHttpClient {
+        val interceptor = HttpLoggingInterceptor(logger = {
+            Timber.tag("###").d("\nit\n")
+        })
+        interceptor.level = HttpLoggingInterceptor.Level.BASIC
+
         val builder = OkHttpClient.Builder()
             .connectTimeout(Constant.CONNECT_TIMEOUT_SEC, TimeUnit.SECONDS)
             .readTimeout(Constant.READ_TIMEOUT_SEC, TimeUnit.SECONDS)
-
+            .addInterceptor(interceptor)
         return builder.build()
     }
 
