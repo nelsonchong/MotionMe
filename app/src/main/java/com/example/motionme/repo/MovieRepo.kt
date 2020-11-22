@@ -1,9 +1,19 @@
 package com.example.motionme.repo
 
-interface MovieRepo : BaseRepo {
+import com.example.motionme.network.ApiService
+import com.example.motionme.network.response.MovieSummaryResponse
+import retrofit2.Call
 
+interface MovieRepo : BaseRepo {
+    fun searchMovieList(query: String): Call<MovieSummaryResponse>
 }
 
-class MovieRepoImpl : MovieRepo {
+class MovieRepoImpl(
+    private val apiService: ApiService
+) : MovieRepo {
+
+    override fun searchMovieList(query: String): Call<MovieSummaryResponse> {
+        return apiService.getMovieList(query)
+    }
 
 }

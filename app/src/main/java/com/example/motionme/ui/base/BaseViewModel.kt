@@ -30,4 +30,7 @@ open class BaseViewModel : ViewModel() {
         _showToast.postValue(message)
     }
 
+    fun showToast(error: Throwable) {
+        _showToast.postValue(error.localizedMessage ?: "Something went wrong.")
+    }
 }

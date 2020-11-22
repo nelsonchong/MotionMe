@@ -1,5 +1,6 @@
 package com.example.motionme.di
 
+import com.example.motionme.network.ApiService
 import com.example.motionme.repo.MovieRepo
 import com.example.motionme.repo.MovieRepoImpl
 import dagger.Module
@@ -12,8 +13,8 @@ import dagger.hilt.android.components.ActivityComponent
 object RepoModule {
 
     @Provides
-    fun provideMovieRepo(): MovieRepo {
-        return MovieRepoImpl()
+    fun provideMovieRepo(apiService: ApiService): MovieRepo {
+        return MovieRepoImpl(apiService)
     }
 
 }
