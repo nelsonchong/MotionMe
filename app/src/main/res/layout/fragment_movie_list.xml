@@ -84,14 +84,11 @@
             android:text="Film List"
             app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
-        <GridView
-            android:id="@+id/gridView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:horizontalSpacing="@dimen/horizontal_margin"
-            android:numColumns="2"
             android:padding="@dimen/horizontal_margin"
-            android:verticalSpacing="@dimen/vertical_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvFilmList" />
 
