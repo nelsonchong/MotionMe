@@ -22,10 +22,22 @@ fun View.hide() {
     visibility = View.INVISIBLE
 }
 
+// To retrieve numeric characters from string
 fun String.digitOnly(): String {
     return replace(Regex("[^\\d]"), "")
 }
 
-fun String.removeBracket(): String {
+// To retrieve string before char (
+// eg. "ABC (DEF)" to "ABC"
+fun String.beforeBracket(): String {
     return substringBefore("(").trim()
+}
+
+// To convert minutes to hour and minute format
+// eg. "90 min" to "1h 30min"
+fun String.convertToHourMinFormat(): String {
+    val digits = digitOnly().toIntOrNull() ?: 0
+    val hour: Int = (digits / 60)
+    val minute: Int = digits % 60
+    return "${hour}h ${minute}min"
 }

@@ -1,11 +1,10 @@
 package com.example.motionme.model
 
-import com.example.motionme.extension.digitOnly
-import com.example.motionme.extension.removeBracket
+import com.example.motionme.extension.beforeBracket
+import com.example.motionme.extension.convertToHourMinFormat
 import com.example.motionme.ui.movieDetail.MovieDetailAdapter
 import com.example.motionme.ui.movieList.MovieListAdapter
 import com.google.gson.annotations.SerializedName
-import timber.log.Timber
 
 open class MovieSummary {
     @SerializedName("Title")
@@ -47,13 +46,13 @@ class Movie : MovieSummary() {
     val genre: String = ""
 
     @SerializedName("Director")
-    val director: String = ""
+    var director: String = ""
 
     @SerializedName("Writer")
-    val writer: String = ""
+    var writer: String = ""
 
     @SerializedName("Actors")
-    val actors: String = ""
+    var actors: String = ""
 
     @SerializedName("Plot")
     val plot: String = ""
@@ -100,16 +99,7 @@ class Movie : MovieSummary() {
             info = info.plus("     $rated")
         }
         if (runtime.isNotEmpty()) {
-            val digits = runtime.digitOnly().toIntOrNull() ?: 0
-            val hour: Int = (digits / 60)
-            val minute: Int = digits % 60
-
-            Timber.tag("###").d("Runtime: $runtime")
-            Timber.tag("###").d("Digits: $digits")
-            Timber.tag("###").d("Hour: $hour")
-            Timber.tag("###").d("Minute: $minute")
-
-            info = info.plus("     ${hour}h ${minute}min")
+            info = info.plus("     ${runtime.convertToHourMinFormat()}")
         }
 
         return info
@@ -118,20 +108,23 @@ class Movie : MovieSummary() {
     fun mapCastModel(): List<MovieDetailAdapter.CastModel> {
         val infos = arrayListOf<MovieDetailAdapter.CastInfo>()
         director.split(",").forEach { name ->
-            if (infos.indexOfFirst { it.name == name } == -1) {
-                infos.add(MovieDetailAdapter.CastInfo(name.removeBracket(), "Director"))
+            val formatted = name.beforeBracket()
+            if (formatted.isNotEmpty() && infos.indexOfFirst { it.name == formatted } == -1) {
+                infos.add(MovieDetailAdapter.CastInfo(formatted, "Director"))
             }
         }
 
         actors.split(",").forEach { name ->
-            if (infos.indexOfFirst { it.name == name } == -1) {
-                infos.add(MovieDetailAdapter.CastInfo(name.removeBracket(), "Actor"))
+            val formatted = name.beforeBracket()
+            if (formatted.isNotEmpty() && infos.indexOfFirst { it.name == formatted } == -1) {
+                infos.add(MovieDetailAdapter.CastInfo(formatted, "Actor"))
             }
         }
 
         writer.split(",").forEach { name ->
-            if (infos.indexOfFirst { it.name == name } == -1) {
-                infos.add(MovieDetailAdapter.CastInfo(name.removeBracket(), "Writer"))
+            val formatted = name.beforeBracket()
+            if (formatted.isNotEmpty() && infos.indexOfFirst { it.name == formatted } == -1) {
+                infos.add(MovieDetailAdapter.CastInfo(formatted, "Writer"))
             }
         }
 
