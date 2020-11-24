@@ -22,6 +22,7 @@ class MovieListViewModel @ViewModelInject constructor(
     private var query: String = ""
     private var page: Int = 1
     private var isLoading: Boolean = false
+    private var totalResults: Int = 0
 
     fun search(query: String) {
         if (isLoading) return
@@ -36,6 +37,10 @@ class MovieListViewModel @ViewModelInject constructor(
 
     fun load() {
         if (isLoading) return
+
+        data.value?.count()?.let {
+            if (it >= totalResults) return
+        }
 
         page += 1
         isLoading = true
@@ -63,6 +68,8 @@ class MovieListViewModel @ViewModelInject constructor(
                     showToast(response.message())
                     return
                 }
+
+                totalResults = response.body()?.totalResults?.toInt() ?: 0
 
                 response.body()?.movies?.let {
                     val oldData =
