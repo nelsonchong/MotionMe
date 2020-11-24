@@ -21,6 +21,8 @@ class MovieDetailViewModel @ViewModelInject constructor(
     private val _loading = MutableLiveData<Boolean>().apply { value = false }
     val loading: LiveData<Boolean> = _loading
 
+    private var title: String = ""
+
     fun load(imdbId: String) {
         if (imdbId.isEmpty()) {
             showToast("Something went wrong.")
@@ -40,23 +42,37 @@ class MovieDetailViewModel @ViewModelInject constructor(
 
                 val list = arrayListOf<MovieDetailAdapter.Model>()
                 response.body()?.let {
-                    list.add(MovieDetailAdapter.PosterModel(poster = it.poster))
+                    title = it.title
+                    list.add(
+                        MovieDetailAdapter.PosterModel(
+                            poster = it.poster,
+                            rating = it.imdbRating,
+                            numOfVotes = it.imdbVotes,
+                            metascore = it.metascore
+                        )
+                    )
                     list.add(MovieDetailAdapter.SmallSpaceModel())
                     list.add(
                         MovieDetailAdapter.TitleModel(
                             title = it.title,
-                            info = it.mapInfo(),
-                            imdbId = it.imdbId
+                            info = it.mapInfo()
                         )
                     )
+                    list.add(MovieDetailAdapter.SmallSpaceModel())
+                    list.add(MovieDetailAdapter.GenreModel(
+                        genres = it.genre.split(",").map { genre -> genre.trim() }
+                    ))
                     list.add(MovieDetailAdapter.LargeSpaceModel())
                     list.add(MovieDetailAdapter.HeaderModel(text = "Plot Summary"))
                     list.add(MovieDetailAdapter.SmallSpaceModel())
                     list.add(MovieDetailAdapter.BodyModel(text = it.plot))
                     list.add(MovieDetailAdapter.LargeSpaceModel())
                     list.add(MovieDetailAdapter.HeaderModel(text = "Cast & Crew"))
-                    list.addAll(it.mapCastModel())
                     list.add(MovieDetailAdapter.SmallSpaceModel())
+                    it.mapCastModel().forEach { castModel ->
+                        list.add(castModel)
+                        list.add(MovieDetailAdapter.SmallSpaceModel())
+                    }
                 }
 
                 _data.postValue(list)
@@ -68,6 +84,10 @@ class MovieDetailViewModel @ViewModelInject constructor(
             }
 
         })
+    }
+
+    fun mapYoutubeUrl(): String {
+        return "https://www.youtube.com/results?search_query=$title"
     }
 
 }

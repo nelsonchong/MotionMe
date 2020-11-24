@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/horizontal_margin"
+        android:paddingEnd="@dimen/horizontal_margin">
+
+        <TextView
+            android:id="@+id/tvGenre1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_rounded_rect_outline"
+            android:paddingStart="@dimen/horizontal_margin"
+            android:paddingTop="@dimen/half_margin"
+            android:paddingEnd="@dimen/horizontal_margin"
+            android:paddingBottom="@dimen/half_margin"
+            android:textColor="@color/colorGrey"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvGenre2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:background="@drawable/shape_rounded_rect_outline"
+            android:paddingStart="@dimen/horizontal_margin"
+            android:paddingTop="@dimen/half_margin"
+            android:paddingEnd="@dimen/horizontal_margin"
+            android:paddingBottom="@dimen/half_margin"
+            android:textColor="@color/colorGrey"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvGenre3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:background="@drawable/shape_rounded_rect_outline"
+            android:paddingStart="@dimen/horizontal_margin"
+            android:paddingTop="@dimen/half_margin"
+            android:paddingEnd="@dimen/horizontal_margin"
+            android:paddingBottom="@dimen/half_margin"
+            android:textColor="@color/colorGrey"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</layout>

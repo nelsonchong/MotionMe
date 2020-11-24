@@ -68,7 +68,7 @@ class Movie : MovieSummary() {
     val awards: String = ""
 
     @SerializedName("Metascore")
-    val metaScore: String = ""
+    val metascore: String = ""
 
     @SerializedName("imdbRating")
     val imdbRating: String = ""

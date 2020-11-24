@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.motionme.R
 import com.example.motionme.databinding.*
+import com.example.motionme.extension.gone
 import com.example.motionme.extension.hide
 import com.example.motionme.extension.show
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
 class MovieDetailAdapter(
     private val context: Context,
-    private val onTap: (String) -> Unit
+    private val onTap: () -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     enum class Type {
@@ -25,20 +26,23 @@ class MovieDetailAdapter(
         Title {
             override val viewType: Int = 1
         },
-        Header {
+        Genre {
             override val viewType: Int = 2
         },
-        Body {
+        Header {
             override val viewType: Int = 3
         },
-        Cast {
+        Body {
             override val viewType: Int = 4
         },
-        SmallSpace {
+        Cast {
             override val viewType: Int = 5
         },
-        LargeSpace {
+        SmallSpace {
             override val viewType: Int = 6
+        },
+        LargeSpace {
+            override val viewType: Int = 7
         };
 
         abstract val viewType: Int
@@ -64,8 +68,14 @@ class MovieDetailAdapter(
                     inflater, R.layout.cell_movie_detail_title, parent, false
                 )
                 TitleViewHolder(binding) {
-                    onTap(it)
+                    onTap()
                 }
+            }
+            Type.Genre.viewType -> {
+                val binding = DataBindingUtil.inflate<CellMovieDetailGenreBinding>(
+                    inflater, R.layout.cell_movie_detail_genre, parent, false
+                )
+                GenreViewHolder(binding)
             }
             Type.Header.viewType -> {
                 val binding = DataBindingUtil.inflate<CellMovieDetailHeaderBinding>(
@@ -110,6 +120,7 @@ class MovieDetailAdapter(
         when (holder) {
             is PosterViewHolder -> holder.bind(context, data[position] as PosterModel)
             is TitleViewHolder -> holder.bind(data[position] as TitleModel)
+            is GenreViewHolder -> holder.bind(data[position] as GenreModel)
             is HeaderViewHolder -> holder.bind(data[position] as HeaderModel)
             is BodyViewHolder -> holder.bind(data[position] as BodyModel)
             is CastViewHolder -> holder.bind(data[position] as CastModel)
@@ -126,36 +137,65 @@ class MovieDetailAdapter(
         return data[position].type.viewType
     }
 
-    class PosterViewHolder(
+    private class PosterViewHolder(
         private val binding: CellMovieDetailPosterBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(context: Context, model: PosterModel) {
-            binding.ivPoster.clipToOutline = true
-
             Glide
                 .with(context)
                 .load(model.poster)
                 .centerCrop()
                 .placeholder(R.color.colorGrey)
                 .into(binding.ivPoster)
+
+            binding.tvRating.text = model.rating
+            binding.tvNumOfVote.text = model.numOfVotes
+            binding.tvMetascore.text = model.metascore
         }
     }
 
-    class TitleViewHolder(
+    private class TitleViewHolder(
         private val binding: CellMovieDetailTitleBinding,
-        private val onTap: (String) -> Unit
+        private val onTap: () -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(model: TitleModel) {
             binding.tvTitle.text = model.title
             binding.tvInfo.text = model.info
 
             binding.btnPlay.onClick {
-                onTap(model.imdbId)
+                onTap()
             }
         }
     }
 
-    class HeaderViewHolder(
+    private class GenreViewHolder(
+        private val binding: CellMovieDetailGenreBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(model: GenreModel) {
+            if (model.genres.size > 2) {
+                binding.tvGenre3.show()
+                binding.tvGenre3.text = model.genres[2]
+            } else {
+                binding.tvGenre3.gone()
+            }
+
+            if (model.genres.size > 1) {
+                binding.tvGenre2.show()
+                binding.tvGenre2.text = model.genres[1]
+            } else {
+                binding.tvGenre2.gone()
+            }
+
+            if (model.genres.isNotEmpty()) {
+                binding.tvGenre1.show()
+                binding.tvGenre1.text = model.genres[0]
+            } else {
+                binding.tvGenre1.gone()
+            }
+        }
+    }
+
+    private class HeaderViewHolder(
         private val binding: CellMovieDetailHeaderBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(model: HeaderModel) {
@@ -163,7 +203,7 @@ class MovieDetailAdapter(
         }
     }
 
-    class BodyViewHolder(
+    private class BodyViewHolder(
         private val binding: CellMovieDetailBodyBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(model: BodyModel) {
@@ -171,7 +211,7 @@ class MovieDetailAdapter(
         }
     }
 
-    class CastViewHolder(
+    private class CastViewHolder(
         private val binding: CellMovieDetailCastBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(model: CastModel) {
@@ -209,13 +249,13 @@ class MovieDetailAdapter(
         }
     }
 
-    class SmallSpaceViewHolder(
+    private class SmallSpaceViewHolder(
         view: View
     ) : RecyclerView.ViewHolder(view) {
         fun bind() {}
     }
 
-    class LargeSpaceViewHolder(
+    private class LargeSpaceViewHolder(
         view: View
     ) : RecyclerView.ViewHolder(view) {
         fun bind() {}
@@ -227,14 +267,21 @@ class MovieDetailAdapter(
 
     data class PosterModel(
         val poster: String,
+        val rating: String,
+        val numOfVotes: String,
+        val metascore: String,
         override val type: Type = Type.Poster
     ) : Model
 
     data class TitleModel(
         val title: String,
         val info: String,
-        val imdbId: String,
         override val type: Type = Type.Title
+    ) : Model
+
+    data class GenreModel(
+        val genres: List<String>,
+        override val type: Type = Type.Genre
     ) : Model
 
     data class HeaderModel(

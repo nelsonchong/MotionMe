@@ -61,17 +61,17 @@
                         android:src="@drawable/ic_rating" />
 
                     <TextView
+                        android:id="@+id/tvRating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="8.2/10"
                         android:textColor="@color/colorBlack"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvNumOfVote"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="150,212"
                         android:textColor="@color/colorGrey"
                         android:textSize="12sp" />
 
@@ -108,11 +108,11 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvMetascore"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:background="@drawable/shape_rounded_rect"
                         android:gravity="center"
-                        android:text="86"
                         android:textColor="@color/colorWhite"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -124,13 +124,6 @@
                         android:textColor="@color/colorBlack"
                         android:textSize="13sp"
                         android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="62 critic reviews"
-                        android:textColor="@color/colorGrey"
-                        android:textSize="12sp" />
 
                 </LinearLayout>
 

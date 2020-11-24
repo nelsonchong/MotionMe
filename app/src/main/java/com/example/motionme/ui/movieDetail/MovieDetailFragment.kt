@@ -1,5 +1,7 @@
 package com.example.motionme.ui.movieDetail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +18,8 @@ import com.example.motionme.extension.show
 import com.example.motionme.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.jetbrains.anko.sdk27.coroutines.onClick
-import org.jetbrains.anko.support.v4.toast
 import timber.log.Timber
+
 
 @AndroidEntryPoint
 class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
@@ -61,8 +63,11 @@ class MovieDetailFragment : BaseFragment<MovieDetailViewModel>() {
 
     private fun setupView() {
         adapter = MovieDetailAdapter(requireContext()) {
-            toast(it)
-            Timber.tag("###").d(it)
+            val url = viewModel.mapYoutubeUrl()
+            Timber.tag("###").d(url)
+
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(browserIntent)
         }
 
         binding.recyclerView.apply {
