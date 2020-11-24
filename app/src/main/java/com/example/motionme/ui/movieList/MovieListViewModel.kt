@@ -25,6 +25,8 @@ class MovieListViewModel @ViewModelInject constructor(
     private var totalResults: Int = 0
 
     fun search(query: String) {
+        if (query.isEmpty()) return
+
         this.query = query
         page = 1
         isLoading = true
