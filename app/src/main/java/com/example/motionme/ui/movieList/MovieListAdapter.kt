@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.motionme.R
@@ -19,6 +20,13 @@ class MovieListAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var data: List<Model> = emptyList()
+    set(value) {
+        val diffCallback = DiffCallback(field, value)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        field = value
+
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -60,6 +68,7 @@ class MovieListAdapter(
         return data[position].type.viewType
     }
 
+    // View Holder
     class MovieViewHolder(
         private val binding: CellMovieListBinding,
         private val onTap: (String) -> Unit
@@ -105,12 +114,14 @@ class MovieListAdapter(
         }
     }
 
+    // View Holder
     class LoadingViewHolder(
         binding: CellLoadingBinding
     ): RecyclerView.ViewHolder(binding.root) {
         fun bind() { }
     }
 
+    // ViewType enums
     enum class Type {
         Data {
             override val viewType: Int = 0
@@ -126,6 +137,7 @@ class MovieListAdapter(
         val type: Type
     }
 
+    // Models
     data class MovieGridModel(
         var movieInfoLeft: MovieInfo,
         var movieInfoRight: MovieInfo? = null,
@@ -142,4 +154,47 @@ class MovieListAdapter(
         val year: String,
         val poster: String
     )
+
+    class DiffCallback(
+        private val oldList: List<Model>,
+        private val newList: List<Model>
+    ): DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int {
+            return oldList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldItem = oldList[oldItemPosition]
+            val newItem = newList[newItemPosition]
+
+            if (oldItem.type == Type.Loading && newItem.type == Type.Loading) return true
+
+            if (oldItem is MovieGridModel && newItem is MovieGridModel) {
+                return oldItem.movieInfoLeft.imdbId == newItem.movieInfoLeft.imdbId &&
+                        oldItem.movieInfoRight?.imdbId == newItem.movieInfoRight?.imdbId
+            }
+
+            return false
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldItem = oldList[oldItemPosition]
+            val newItem = newList[newItemPosition]
+
+            return when {
+                oldItem is LoadingModel && newItem is LoadingModel -> {
+                    true
+                }
+                oldItem is MovieGridModel && newItem is MovieGridModel -> {
+                    oldItem as MovieGridModel == newItem as MovieGridModel
+                }
+                else -> false
+            }
+        }
+    }
 }

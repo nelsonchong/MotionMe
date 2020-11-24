@@ -25,13 +25,10 @@ class MovieListViewModel @ViewModelInject constructor(
     private var totalResults: Int = 0
 
     fun search(query: String) {
-        if (isLoading) return
-
         this.query = query
         page = 1
         isLoading = true
-        insertLoading()
-
+        insertLoading(true)
         searchMovieList(query, page)
     }
 
@@ -44,8 +41,7 @@ class MovieListViewModel @ViewModelInject constructor(
 
         page += 1
         isLoading = true
-        insertLoading()
-
+        insertLoading(false)
         searchMovieList(query, page)
     }
 
@@ -93,10 +89,14 @@ class MovieListViewModel @ViewModelInject constructor(
         })
     }
 
-    private fun insertLoading() {
-        if (data.value?.lastOrNull()?.type == MovieListAdapter.Type.Loading) return
+    private fun insertLoading(clear: Boolean) {
+        if (clear) {
+            _data.postValue(listOf(MovieListAdapter.LoadingModel()))
+        } else {
+            if (data.value?.lastOrNull()?.type == MovieListAdapter.Type.Loading) return
 
-        _data.postValue((data.value ?: emptyList()) + MovieListAdapter.LoadingModel())
+            _data.postValue((data.value ?: emptyList()) + MovieListAdapter.LoadingModel())
+        }
     }
 }
 

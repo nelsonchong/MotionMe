@@ -78,7 +78,6 @@ class MovieListFragment : BaseFragment<MovieListViewModel>() {
         viewModel.apply {
             observe(data) {
                 adapter.data = it
-                adapter.notifyDataSetChanged()
             }
         }
     }
