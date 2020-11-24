@@ -11,6 +11,7 @@ interface ApiService {
     @GET("?apikey=${Constant.API_KEY}")
     fun getMovieList(
         @Query("s") search: String,
+        @Query("page") page: Int,
         @Query("type") type: String = "movie"
     ): Call<MovieSummaryResponse>
 

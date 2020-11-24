@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.motionme.R
 import com.example.motionme.databinding.FragmentMovieListBinding
+import com.example.motionme.extension.observe
 import com.example.motionme.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.jetbrains.anko.appcompat.v7.coroutines.onQueryTextListener
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MovieListFragment : BaseFragment<MovieListViewModel>() {
@@ -34,6 +37,7 @@ class MovieListFragment : BaseFragment<MovieListViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupView()
+        setupObservers()
     }
 
     private fun setupView() {
@@ -48,16 +52,35 @@ class MovieListFragment : BaseFragment<MovieListViewModel>() {
             }
         }
 
-        adapter = MovieListAdapter()
+        adapter = MovieListAdapter(requireContext()) {
+            Timber.tag("###").d(it)
+        }
 
         binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = this@MovieListFragment.adapter
+
+            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    (recyclerView.layoutManager as LinearLayoutManager?)?.let {
+                        if (viewModel.isLastItemShown(it.findLastCompletelyVisibleItemPosition())) {
+                            viewModel.load()
+                        }
+                    }
+                }
+            })
         }
     }
 
     private fun setupObservers() {
-
+        viewModel.apply {
+            observe(data) {
+                adapter.data = it
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 
 }
