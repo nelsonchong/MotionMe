@@ -14,6 +14,18 @@ fun View.show() {
     visibility = View.VISIBLE
 }
 
-fun View.hide() {
+fun View.gone() {
     visibility = View.GONE
+}
+
+fun View.hide() {
+    visibility = View.INVISIBLE
+}
+
+fun String.digitOnly(): String {
+    return replace(Regex("[^\\d]"), "")
+}
+
+fun String.removeBracket(): String {
+    return substringBefore("(").trim()
 }

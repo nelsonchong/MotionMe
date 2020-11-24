@@ -1,6 +1,7 @@
 package com.example.motionme.network
 
 import com.example.motionme.constant.Constant
+import com.example.motionme.model.Movie
 import com.example.motionme.network.response.MovieSummaryResponse
 import retrofit2.Call
 import retrofit2.http.GET
@@ -15,7 +16,7 @@ interface ApiService {
         @Query("type") type: String = "movie"
     ): Call<MovieSummaryResponse>
 
-//    @GET("?apikey=${Constant.API_KEY}")
-//    fun getMovieDetail(@Query("i") id: String)
+    @GET("?apikey=${Constant.API_KEY}")
+    fun getMovieDetail(@Query("i") id: String): Call<Movie>
 
 }

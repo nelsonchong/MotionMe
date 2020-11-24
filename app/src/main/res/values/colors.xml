@@ -9,6 +9,8 @@
     <color name="colorGrey">#666666</color>
 
     <color name="colorOrange">#ff6600</color>
+    <color name="colorYellow">#FFCA00</color>
+    <color name="colorGreen">#00d85d</color>
 
     <color name="transparent">@android:color/transparent</color>
     <color name="colorBackground">#f8f8f8</color>

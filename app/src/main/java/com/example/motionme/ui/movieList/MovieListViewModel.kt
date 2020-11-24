@@ -69,7 +69,9 @@ class MovieListViewModel @ViewModelInject constructor(
 
                 response.body()?.movies?.let {
                     val oldData =
-                        if (data.value?.lastOrNull()?.type == MovieListAdapter.Type.Loading) data.value?.dropLast(1)
+                        if (data.value?.lastOrNull()?.type == MovieListAdapter.Type.Loading) data.value?.dropLast(
+                            1
+                        )
                         else data.value
 
                     val newData = it.mapModel()

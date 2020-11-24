@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.motionme.R
 import com.example.motionme.databinding.CellLoadingBinding
 import com.example.motionme.databinding.CellMovieListBinding
-import com.example.motionme.extension.hide
+import com.example.motionme.extension.gone
 import com.example.motionme.extension.show
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
@@ -20,13 +20,13 @@ class MovieListAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var data: List<Model> = emptyList()
-    set(value) {
-        val diffCallback = DiffCallback(field, value)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        field = value
+        set(value) {
+            val diffCallback = DiffCallback(field, value)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            field = value
 
-        diffResult.dispatchUpdatesTo(this)
-    }
+            diffResult.dispatchUpdatesTo(this)
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -83,7 +83,7 @@ class MovieListAdapter(
                 binding.tvTitleRight.text = it.title
                 binding.tvYearRight.text = it.year
             } ?: kotlin.run {
-                binding.cardViewRight.hide()
+                binding.cardViewRight.gone()
             }
 
             Glide
@@ -117,8 +117,8 @@ class MovieListAdapter(
     // View Holder
     class LoadingViewHolder(
         binding: CellLoadingBinding
-    ): RecyclerView.ViewHolder(binding.root) {
-        fun bind() { }
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind() {}
     }
 
     // ViewType enums
@@ -142,11 +142,11 @@ class MovieListAdapter(
         var movieInfoLeft: MovieInfo,
         var movieInfoRight: MovieInfo? = null,
         override var type: Type = Type.Data
-    ): Model
+    ) : Model
 
     data class LoadingModel(
         override var type: Type = Type.Loading
-    ): Model
+    ) : Model
 
     data class MovieInfo(
         val imdbId: String,
@@ -158,7 +158,7 @@ class MovieListAdapter(
     class DiffCallback(
         private val oldList: List<Model>,
         private val newList: List<Model>
-    ): DiffUtil.Callback() {
+    ) : DiffUtil.Callback() {
 
         override fun getOldListSize(): Int {
             return oldList.size

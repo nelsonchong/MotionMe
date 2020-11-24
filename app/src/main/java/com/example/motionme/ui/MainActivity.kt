@@ -1,12 +1,12 @@
 package com.example.motionme.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.example.motionme.R
+import com.example.motionme.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
