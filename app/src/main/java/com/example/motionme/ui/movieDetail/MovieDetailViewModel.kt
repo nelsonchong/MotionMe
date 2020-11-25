@@ -46,7 +46,7 @@ class MovieDetailViewModel @ViewModelInject constructor(
                     list.add(
                         MovieDetailAdapter.PosterModel(
                             poster = it.poster,
-                            rating = it.imdbRating,
+                            rating = "${it.imdbRating}/10",
                             numOfVotes = it.imdbVotes,
                             metascore = it.metascore
                         )
