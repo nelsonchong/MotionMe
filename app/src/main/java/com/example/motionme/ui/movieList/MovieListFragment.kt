@@ -30,7 +30,7 @@ class MovieListFragment : BaseFragment<MovieListViewModel>() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, getLayoutResId(), container, false)
         binding.lifecycleOwner = this
         return binding.root
@@ -40,6 +40,7 @@ class MovieListFragment : BaseFragment<MovieListViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         setupView()
         setupObservers()
+        load()
     }
 
     override fun onDestroy() {
@@ -90,6 +91,10 @@ class MovieListFragment : BaseFragment<MovieListViewModel>() {
                 adapter.data = it
             }
         }
+    }
+
+    private fun load() {
+        viewModel.search("batman")
     }
 
     private fun removeObservers() {
