@@ -1,4 +1,5 @@
 # MotionMe
-![movie-list 2](https://user-images.githubusercontent.com/42514900/100177857-cddfab00-2f0d-11eb-8b3d-d7e0af867644.png)
+![movie-list](https://user-images.githubusercontent.com/42514900/100209886-588fcc80-2f45-11eb-9c82-4c3193c1de89.png)
 
-![movie-detail 2](https://user-images.githubusercontent.com/42514900/100177943-f5cf0e80-2f0d-11eb-9ef2-d9cfa8b6e69e.png)
+![movie-detail](https://user-images.githubusercontent.com/42514900/100209867-53cb1880-2f45-11eb-9797-f3d88a217ac0.png)
+
